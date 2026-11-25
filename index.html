@@ -16,7 +16,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Firebase SDKs (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <style>
     body {
@@ -1009,10 +1012,33 @@
   <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-xs font-extrabold px-5 py-3 rounded-2xl shadow-xl"></div>
 
   <script>
-    // ================= 0. إعدادات Supabase والمصادقة والبصمة =================
-    const SUPABASE_URL = 'https://sfpprapawdebunngbgxr.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_-olARAPLz6-yxF6ZFLezAA_nZQ-DxAC';
-    const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ================= 0. إعدادات Firebase والمصادقة والبصمة =================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCT2ghS2AcTgFvHTDXYCxICK87RxQZ3KLs", // استبدله بمفتاح API الفعلي من الكونسول
+      authDomain: "masroofy-69ad0.firebaseapp.com",
+      projectId: "masroofy-69ad0",
+      storageBucket: "masroofy-69ad0.firebasestorage.app",
+      messagingSenderId: "930757142968",
+      appId: "1:930757142968:web:4150b8f10d84ace059074d", // استبدله بمعرّف تطبيق الويب الفعلي
+      measurementId: "G-E7NFJ39B2F"
+    };
+
+    let fbAuth = null;
+    let fbDb = null;
+    let firebaseReady = false;
+
+    try {
+      if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("YOUR_ACTUAL")) {
+        firebase.initializeApp(firebaseConfig);
+        fbAuth = firebase.auth();
+        fbDb = firebase.firestore();
+        firebaseReady = true;
+      } else {
+        console.warn("Firebase config contains placeholders. Please replace apiKey and appId.");
+      }
+    } catch (e) {
+      console.error("Firebase init error:", e);
+    }
 
     let currentUser = null;
     let authMode = 'login';
@@ -1026,7 +1052,7 @@
       el.className = status === 'saving'
         ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200'
         : status === 'error'
-        ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200'
+        ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200'
         : 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
     }
 
@@ -1049,29 +1075,37 @@
       const errBox = document.getElementById('authErrorMsg');
       const btn = document.getElementById('authSubmitBtn');
 
+      if (!firebaseReady) {
+        errBox.textContent = 'يرجى استبدال apiKey و appId الفعليين من Firebase Console داخل الكود أولاً.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
       errBox.classList.add('hidden');
       btn.disabled = true;
       btn.textContent = 'جارٍ التحقق...';
 
       try {
-        let res = authMode === 'signup'
-          ? await sbClient.auth.signUp({ email, password })
-          : await sbClient.auth.signInWithPassword({ email, password });
+        let cred = authMode === 'signup'
+          ? await fbAuth.createUserWithEmailAndPassword(email, password)
+          : await fbAuth.signInWithEmailAndPassword(email, password);
 
-        if (res.error) throw res.error;
-
-        if (res.data?.user) {
-          if (!res.data.session && authMode === 'signup') {
-            errBox.textContent = 'تم إنشاء الحساب! يرجى تأكيد البريد الإلكتروني أو إغلاق Confirm Email في Supabase.';
-            errBox.classList.remove('hidden');
-          } else {
-            await onUserAuthenticated(res.data.user, true);
-          }
+        if (cred && cred.user) {
+          await onUserAuthenticated(cred.user, true);
         }
       } catch (err) {
-        errBox.textContent = err.message === 'Invalid login credentials'
-          ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
-          : (err.message || 'حدث خطأ أثناء تسجيل الدخول');
+        const code = err.code || '';
+        if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+          errBox.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+        } else if (code === 'auth/email-already-in-use') {
+          errBox.textContent = 'هذا البريد الإلكتروني مسجل بالفعل، اختر تسجيل الدخول';
+        } else if (code === 'auth/weak-password') {
+          errBox.textContent = 'كلمة المرور ضعيفة (يجب أن تكون 6 أحرف على الأقل)';
+        } else if (code === 'auth/operation-not-allowed') {
+          errBox.textContent = 'يرجى تفعيل Email/Password من قسم Authentication في Firebase Console';
+        } else {
+          errBox.textContent = err.message || 'حدث خطأ أثناء تسجيل الدخول';
+        }
         errBox.classList.remove('hidden');
       } finally {
         btn.disabled = false;
@@ -1080,13 +1114,13 @@
     }
 
     async function onUserAuthenticated(user, skipBioLock = false) {
-      currentUser = user;
+      currentUser = { id: user.uid, email: user.email };
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('settingsUserEmail').textContent = user.email;
       document.getElementById('bioUserEmailHint').textContent = user.email;
       updateBiometricUI();
 
-      const bioEnabled = localStorage.getItem('masroofy_bio_' + user.id);
+      const bioEnabled = localStorage.getItem('masroofy_bio_' + user.uid);
       if (bioEnabled && !skipBioLock) {
         const lockEl = document.getElementById('biometricLockScreen');
         lockEl.classList.remove('hidden');
@@ -1099,7 +1133,7 @@
     }
 
     async function logoutUser() {
-      await sbClient.auth.signOut();
+      if (fbAuth) await fbAuth.signOut();
       currentUser = null;
       document.getElementById('biometricLockScreen').classList.add('hidden');
       document.getElementById('biometricLockScreen').classList.remove('flex');
@@ -1244,35 +1278,43 @@
     let appState = loadLocalState();
 
     async function loadCloudState() {
-      if (!currentUser) return;
+      if (!currentUser || !fbDb) return;
       setSyncBadge('saving', 'جارٍ المزامنة...');
       try {
-        const { data, error } = await sbClient.from('masroofy_state').select('app_data').eq('user_id', currentUser.id).maybeSingle();
-        if (error) throw error;
-        if (data && data.app_data) {
+        const docRef = fbDb.collection('masroofy_users').doc(currentUser.id);
+        const docSnap = await docRef.get();
+        if (docSnap.exists && docSnap.data()?.app_data) {
+          const cloudData = docSnap.data().app_data;
           appState = {
             ...getDefaultState(),
-            ...data.app_data,
-            goldPrices: { ...getDefaultState().goldPrices, ...(data.app_data.goldPrices || {}) }
+            ...cloudData,
+            goldPrices: { ...getDefaultState().goldPrices, ...(cloudData.goldPrices || {}) }
           };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
           setSyncBadge('synced', 'محفوظ سحابياً ✓');
         } else {
+          // أول دخول: رفع البيانات المحلية الحالية إلى السحابة
           await pushStateToCloud();
         }
       } catch (err) {
-        setSyncBadge('error', 'حفظ محلي');
+        console.error("Firestore load error:", err);
+        setSyncBadge('error', 'خطأ في صلاحيات السحابة');
       }
     }
 
     async function pushStateToCloud() {
-      if (!currentUser) return;
+      if (!currentUser || !fbDb) return;
+      setSyncBadge('saving', 'جارٍ الحفظ...');
       try {
-        const { error } = await sbClient.from('masroofy_state').upsert({ user_id: currentUser.id, app_data: appState, updated_at: new Date().toISOString() });
-        if (error) throw error;
+        await fbDb.collection('masroofy_users').doc(currentUser.id).set({
+          email: currentUser.email,
+          app_data: appState,
+          updated_at: new Date().toISOString()
+        }, { merge: true });
         setSyncBadge('synced', 'محفوظ سحابياً ✓');
       } catch (err) {
-        setSyncBadge('error', 'حفظ محلي');
+        console.error("Firestore save error:", err);
+        setSyncBadge('error', 'حفظ محلي (تحقق من Rules)');
       }
     }
 
@@ -2821,15 +2863,21 @@
       r.readAsText(f);
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
+    window.addEventListener('DOMContentLoaded', () => {
       initPWA();
       fillCategoryOptions();
       lucide.createIcons();
 
-      const { data } = await sbClient.auth.getSession();
-      if (data?.session?.user) {
-        await onUserAuthenticated(data.session.user, false);
+      if (firebaseReady && fbAuth) {
+        fbAuth.onAuthStateChanged(async (user) => {
+          if (user) {
+            await onUserAuthenticated(user, false);
+          } else {
+            refreshAll();
+          }
+        });
       } else {
+        setSyncBadge('error', 'أدخل مفاتيح Firebase');
         refreshAll();
       }
     });
