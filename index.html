@@ -1081,7 +1081,9 @@
         return;
       }
 
-      errBox.classList.add('hidden');
+      const ERR_CLS = 'text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-2.5';
+      const INFO_CLS = 'text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-2.5';
+      errBox.className = 'hidden ' + ERR_CLS;
       btn.disabled = true;
       btn.textContent = 'جارٍ التحقق...';
 
@@ -1091,6 +1093,23 @@
           : await fbAuth.signInWithEmailAndPassword(email, password);
 
         if (cred && cred.user) {
+          if (!cred.user.emailVerified) {
+            // إرسال رابط التفعيل ومنع الدخول حتى يتم التفعيل
+            let sendFailed = false;
+            try { await cred.user.sendEmailVerification(); } catch (e) { sendFailed = (e.code === 'auth/too-many-requests') ? 'many' : 'fail'; }
+            await fbAuth.signOut();
+            if (sendFailed === 'many') {
+              errBox.textContent = 'حسابك غير مفعّل. تم إرسال رابط تفعيل قبل قليل، افتح بريدك (وتحقق من Spam) أو حاول بعد دقائق.';
+              errBox.className = ERR_CLS;
+            } else if (sendFailed) {
+              errBox.textContent = 'تعذر إرسال رابط التفعيل، حاول مرة أخرى لاحقاً.';
+              errBox.className = ERR_CLS;
+            } else {
+              errBox.textContent = 'تم إرسال رابط التفعيل إلى ' + email + '. افتح بريدك واضغط على الرابط (وتحقق من Spam) ثم سجّل الدخول.';
+              errBox.className = INFO_CLS;
+            }
+            return;
+          }
           await onUserAuthenticated(cred.user, true);
         }
       } catch (err) {
@@ -1106,7 +1125,7 @@
         } else {
           errBox.textContent = err.message || 'حدث خطأ أثناء تسجيل الدخول';
         }
-        errBox.classList.remove('hidden');
+        errBox.className = ERR_CLS;
       } finally {
         btn.disabled = false;
         btn.textContent = authMode === 'login' ? 'دخول إلى حسابي' : 'إنشاء حساب جديد';
@@ -1114,6 +1133,7 @@
     }
 
     async function onUserAuthenticated(user, skipBioLock = false) {
+      if (!user.emailVerified) { await fbAuth.signOut(); refreshAll(); return; }
       currentUser = { id: user.uid, email: user.email };
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('settingsUserEmail').textContent = user.email;
