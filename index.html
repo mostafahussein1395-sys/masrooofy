@@ -156,6 +156,7 @@
   <!-- المحتوى الرئيسي -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-5 space-y-5">
 
+    <!-- يظهر تذكير قسط الشقة والراتب هنا فقط في لوحة التحكم والأصول والعقارات -->
     <div id="remindersArea" class="space-y-3"></div>
     <div id="alertsArea" class="space-y-2"></div>
 
@@ -225,10 +226,10 @@
             <h3 class="text-sm font-black text-slate-900">التقدم نحو هدف الادخار الشهري</h3>
             <p class="text-xs text-slate-500" id="dashSavingsProgressText">المدخر: 0 | الهدف: 0</p>
           </div>
-          <span class="text-sm font-black text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl" id="dashSavingsPercent">0%</span>
+          <span class="text-sm font-black px-3 py-1 rounded-xl" id="dashSavingsPercent">0%</span>
         </div>
         <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-          <div id="dashSavingsBar" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+          <div id="dashSavingsBar" class="h-full rounded-full transition-all duration-500" style="width: 0%"></div>
         </div>
       </div>
 
@@ -239,7 +240,7 @@
           </h3>
           <button onclick="switchTab('assets')" class="text-xs font-extrabold text-emerald-700 hover:underline">إدارة الأصول ←</button>
         </div>
-        <div id="dashAssetsSummaryGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+        <div id="dashAssetsSummaryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -268,7 +269,6 @@
 
     <!-- ==================== 2. المدخرات والثروة الشاملة ==================== -->
     <section id="tab-savings" class="tab-panel space-y-5">
-      <!-- بطاقة صافي الثروة الكلية -->
       <div class="bg-gradient-to-l from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-md space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -286,7 +286,6 @@
           </div>
         </div>
 
-        <!-- شريط توزيع الثروة -->
         <div class="space-y-1.5 pt-2 border-t border-white/10">
           <div class="flex justify-between text-[11px] font-bold text-slate-300">
             <span id="wealthCashPctLabel">الكاش: 0%</span>
@@ -299,28 +298,28 @@
         </div>
       </div>
 
-      <!-- القسم الأول: الثروة النقدية (خزنة الكاش) -->
+      <!-- القسم الأول: الثروة النقدية (خزنة الكاش - يدعم السالب عند السلف) -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-4">
         <div>
           <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
-            <i data-lucide="banknote" class="w-5 h-5 text-emerald-600"></i> 1. المدخرات النقدية (الكاش المتاح)
+            <i data-lucide="banknote" class="w-5 h-5 text-emerald-600"></i> 1. المدخرات النقدية (الكاش المتاح / السلف)
           </h3>
-          <p class="text-xs text-slate-500">تشمل مدخراتك الشهرية وعوائد بيع الذهب والأراضي</p>
+          <p class="text-xs text-slate-500">إذا ظهر الرصيد بالسالب فهذا يمثل مبلغاً مستلفاً لسداد التزاماتك</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4" id="savingsSARCard">
             <span class="text-xs font-extrabold text-emerald-800">خزنة الريال السعودي (SAR)</span>
             <div class="text-2xl font-black text-emerald-950 mt-1" id="savingsSARBox">0 SAR</div>
             <p class="text-xs text-emerald-700 mt-1" id="savingsSARToEGP">تعادل بالمصري: 0 EGP</p>
           </div>
-          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4" id="savingsEGPCard">
             <span class="text-xs font-extrabold text-amber-800">خزنة الجنيه المصري (EGP)</span>
             <div class="text-2xl font-black text-amber-950 mt-1" id="savingsEGPBox">0 EGP</div>
             <p class="text-xs text-amber-700 mt-1" id="savingsEGPToSAR">تعادل بالسعودي: 0 SAR</p>
           </div>
           <div class="bg-slate-900 text-white rounded-2xl p-4 flex flex-col justify-center">
-            <span class="text-xs text-slate-300">إجمالي الكاش المجمع</span>
+            <span class="text-xs text-slate-300">صافي الكاش المجمع</span>
             <div class="text-2xl font-black text-emerald-400 mt-1" id="savingsCombinedEGPBox">0 EGP</div>
             <p class="text-[11px] text-slate-400 mt-1" id="savingsCombinedSARBox">أو 0 SAR</p>
           </div>
@@ -333,15 +332,14 @@
           <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
             <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-600"></i> 2. حصتي المملوكة في الأصول والاستثمارات
           </h3>
-          <p class="text-xs text-slate-500">تُحسب بالقيمة السوقية الحالية للذهب، والمبالغ المسددة فعلياً في العقارات، ونسبة حصتك في الأراضي</p>
+          <p class="text-xs text-slate-500">تُحسب بالقيمة السوقية الحالية للذهب، والمبالغ المسددة فعلياً في العقارات، ونسبة حصتك في الأراضي والأصول المخصصة</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="wealthAssetsBreakdown"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="wealthAssetsBreakdown"></div>
       </div>
 
-      <!-- سجل حركات الادخار وبيع الأصول -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs">
-        <h3 class="text-sm font-black text-slate-900 mb-3">سجل حركات الادخار وعوائد البيع والسحب</h3>
+        <h3 class="text-sm font-black text-slate-900 mb-3">سجل حركات الادخار وعوائد البيع والسلف</h3>
         <div id="savingsLogList" class="space-y-2"></div>
       </div>
     </section>
@@ -350,12 +348,12 @@
     <section id="tab-assets" class="tab-panel space-y-5">
       <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-lg font-black text-slate-900">الأصول والممتلكات</h2>
-          <p class="text-xs text-slate-500">العقارات بجدول دفعات مرن، الذهب بحساب المكسب/الخسارة الفوري، والأراضي</p>
+          <h2 class="text-lg font-black text-slate-900">الأصول والممتلكات (مرتبة ومصنفة)</h2>
+          <p class="text-xs text-slate-500">العقارات بجدول دفعات مرن، الذهب، الأراضي، وأصولك المخصصة (بورصة، شهادات، سيارات...)</p>
         </div>
         <div class="flex flex-wrap gap-2">
           <button onclick="importUserApartmentPreset()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-extrabold px-3.5 py-2.5 rounded-xl flex items-center gap-1.5">
-            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> إضافة شقتي (جدول 149م جاهز)
+            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> إضافة شقتي (جدول 149م)
           </button>
           <button onclick="openAssetModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
             <i data-lucide="plus" class="w-4 h-4"></i> إضافة أصل جديد
@@ -364,9 +362,9 @@
       </div>
 
       <!-- البطاقات المجمعة -->
-      <div id="assetsGroupedCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      <div id="assetsGroupedCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
 
-      <!-- ملخص محفظة الذهب (الشراء vs السوقي vs المبيعات vs الربح/الخسارة) -->
+      <!-- ملخص محفظة الذهب -->
       <div id="goldSummaryBanner" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-black text-amber-950 flex items-center gap-2">
@@ -377,11 +375,8 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="goldStatsGrid"></div>
       </div>
 
-      <!-- قائمة الأصول التفصيلية -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs">
-        <h3 class="text-sm font-black text-slate-900 mb-3">جميع الأصول المسجلة</h3>
-        <div id="assetsFullList" class="space-y-4"></div>
-      </div>
+      <!-- قائمة الأصول المصنفة حسب الفئة -->
+      <div id="assetsCategorizedContainer" class="space-y-5"></div>
     </section>
 
     <!-- ==================== 4. سجل الحركات ==================== -->
@@ -424,7 +419,7 @@
     <section id="tab-budgets" class="tab-panel space-y-4">
       <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs">
         <h2 class="text-lg font-black text-slate-900">ميزانيات التصنيفات</h2>
-        <p class="text-xs text-slate-500">تتحول تلقائياً عند تغيير عملة العرض وتحذرك عند الوصول إلى 80%</p>
+        <p class="text-xs text-slate-500">أشرطة التقدم موحدة الألوان حسب نسبة الاستهلاك (25% / 50% / 75% / 80% / 90% / 100%)</p>
       </div>
       <div id="budgetsCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
@@ -460,8 +455,13 @@
         </div>
       </div>
 
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-4">
-        <h2 class="text-lg font-black text-slate-900">الإعدادات المالية</h2>
+      <!-- الإعدادات المالية + تحديث أسعار الذهب -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-5">
+        <div>
+          <h2 class="text-lg font-black text-slate-900">الإعدادات المالية وأسعار الذهب</h2>
+          <p class="text-xs text-slate-500">تحديث أسعار الذهب هنا يحدّث قيمة محفظة الذهب وأرباحك في التطبيق بالكامل فوراً</p>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">الراتب الشهري الأساسي (SAR)</label>
@@ -476,8 +476,53 @@
             <input type="number" step="0.01" id="inpExchangeRate" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-black" />
           </div>
         </div>
+
+        <!-- لوحة أسعار الذهب الحالية -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 space-y-3">
+          <h3 class="text-sm font-black text-amber-950 flex items-center gap-2">
+            <i data-lucide="coins" class="w-4 h-4 text-amber-600"></i> أسعار جرام الذهب الحالية (لتحديث قيمة سبائكك تلقائياً)
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white border border-amber-200/80 rounded-xl p-3 space-y-2">
+              <span class="text-xs font-extrabold text-amber-900 block">أسعار الذهب في مصر (EGP)</span>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 24</label>
+                  <input type="number" step="any" id="inpGoldEGP24" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 21</label>
+                  <input type="number" step="any" id="inpGoldEGP21" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 18</label>
+                  <input type="number" step="any" id="inpGoldEGP18" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white border border-amber-200/80 rounded-xl p-3 space-y-2">
+              <span class="text-xs font-extrabold text-amber-900 block">أسعار الذهب في السعودية (SAR)</span>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 24</label>
+                  <input type="number" step="any" id="inpGoldSAR24" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 21</label>
+                  <input type="number" step="any" id="inpGoldSAR21" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">عيار 18</label>
+                  <input type="number" step="any" id="inpGoldSAR18" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="flex flex-wrap gap-2">
-          <button onclick="saveSettings()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl">حفظ الإعدادات</button>
+          <button onclick="saveSettings()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl">حفظ الإعدادات وتحديث الأسعار</button>
           <button onclick="triggerSalaryReminderDemo()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 text-xs font-extrabold px-4 py-2.5 rounded-xl">تجربة تذكير الراتب (يوم 5)</button>
         </div>
       </div>
@@ -522,9 +567,9 @@
 
   <!-- ==================== النوافذ المنبثقة (Modals) ==================== -->
 
-  <!-- 1. نافذة إضافة / تعديل حركة مالية -->
+  <!-- 1. نافذة إضافة / تعديل حركة مالية (مع معاينة الميزانية الفورية وشريط التقدم) -->
   <div id="transactionModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 class="text-base font-black text-slate-900" id="txModalHeading">تسجيل حركة مالية</h3>
         <button onclick="closeModal('transactionModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -541,25 +586,42 @@
       <div class="grid grid-cols-3 gap-2">
         <div class="col-span-2">
           <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ</label>
-          <input type="number" id="txFormAmount" step="any" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-black" />
+          <input type="number" id="txFormAmount" step="any" oninput="updateTxBudgetPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-black" />
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">العملة</label>
-          <select id="txFormCurrency" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs font-extrabold">
+          <select id="txFormCurrency" onchange="updateTxBudgetPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs font-extrabold">
             <option value="SAR">SAR ريال</option>
             <option value="EGP">EGP جنيه</option>
           </select>
         </div>
       </div>
 
-      <div id="txFormCatBox">
-        <label class="block text-xs font-bold text-slate-700 mb-1">التصنيف</label>
-        <select id="txFormCategory" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+      <div id="txFormCatBox" class="space-y-2.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">التصنيف</label>
+          <select id="txFormCategory" onchange="updateTxBudgetPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+        </div>
+
+        <!-- معاينة حية لحالة الميزانية والمتبقي للوصول إلى 100% -->
+        <div id="txBudgetPreviewBox" class="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-extrabold text-slate-700" id="txPrevCatTitle">حالة ميزانية التصنيف</span>
+            <span class="font-black px-2 py-0.5 rounded-lg text-[11px]" id="txPrevPctBadge">0%</span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+            <div id="txPrevProgressBar" class="h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between text-[11px] font-bold text-slate-600">
+            <span id="txPrevSpentText">المصروف: 0</span>
+            <span id="txPrevRemainingText" class="text-emerald-700 font-extrabold">متبقي للـ 100%: 0</span>
+          </div>
+        </div>
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-        <input type="date" id="txFormDate" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+        <input type="date" id="txFormDate" onchange="updateTxBudgetPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
       </div>
 
       <div>
@@ -573,7 +635,7 @@
     </div>
   </div>
 
-  <!-- 2. نافذة إضافة / تعديل أصل (عقار بجدول دفعات مرن / ذهب / أرض) -->
+  <!-- 2. نافذة إضافة / تعديل أصل (عقار / ذهب / أرض / أصل مخصص) -->
   <div id="assetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-3xl w-full p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -589,18 +651,42 @@
             <option value="realestate">عقار / شقة</option>
             <option value="gold">ذهب / سبائك</option>
             <option value="land">أرض</option>
+            <option value="custom">أصل مخصص (بورصة / شهادة / أخرى)</option>
           </select>
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">اسم الأصل</label>
-          <input type="text" id="assetNameInput" placeholder="مثال: شقة 149م / سبيكة 20 جم" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+          <input type="text" id="assetNameInput" placeholder="مثال: أسهم Thndr / شقة / سبيكة" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">العملة / البلد</label>
-          <select id="assetCurrInput" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold">
+          <select id="assetCurrInput" onchange="onAssetCurrChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold">
             <option value="EGP">مصر (جنيه EGP)</option>
             <option value="SAR">السعودية (ريال SAR)</option>
           </select>
+        </div>
+      </div>
+
+      <!-- حقول الأصل المخصص (البورصة، الشهادات، السيارة، إلخ) -->
+      <div id="customFieldsBox" class="hidden bg-purple-50/70 border border-purple-200 rounded-2xl p-4 space-y-3">
+        <span class="text-xs font-black text-purple-950 block">تفاصيل الأصل المخصص (بورصة، شهادات استثمار، سيارة...)</span>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">تصنيف فرعي</label>
+            <input type="text" id="customSubTypeInput" placeholder="مثال: البورصة / شهادة بنكية / سيارة" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">تكلفة الشراء / رأس المال</label>
+            <input type="number" id="customBuyCostInput" step="any" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">نسبة ملكيتي (%)</label>
+            <input type="number" id="customSharePctInput" value="100" min="1" max="100" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات أو تفاصيل إضافية</label>
+          <input type="text" id="customNotesInput" placeholder="مثال: محفظة أسهم على ثاندر / عائد سنوي 20%..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
         </div>
       </div>
 
@@ -629,7 +715,6 @@
           </div>
         </div>
 
-        <!-- جدول الدفعات المجدولة (Milestones) -->
         <div class="pt-2 border-t border-indigo-200/70 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <span class="text-xs font-black text-slate-900">جدول الدفعات والأقساط التعاقدية</span>
@@ -642,7 +727,7 @@
               <thead class="bg-slate-100 text-slate-700 font-extrabold">
                 <tr>
                   <th class="p-2">التاريخ</th>
-                  <th class="p-2">البيان (مقدم، ربع سنوي، سنوي، استلام...)</th>
+                  <th class="p-2">البيان</th>
                   <th class="p-2">القيمة</th>
                   <th class="p-2">الحالة</th>
                   <th class="p-2 text-center">حذف</th>
@@ -652,8 +737,8 @@
             </table>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">ملاحظات تقسيط ما بعد الاستلام (إن وجدت)</label>
-            <input type="text" id="rePostHandoverNote" placeholder="مثال: المتبقي 50% بالتقسيط على 3 أو 5 سنوات بفائدة البنك المركزي" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">ملاحظات تقسيط ما بعد الاستلام</label>
+            <input type="text" id="rePostHandoverNote" placeholder="مثال: المتبقي 50% بالتقسيط على 3 أو 5 سنوات..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold" />
           </div>
         </div>
       </div>
@@ -661,15 +746,15 @@
       <!-- حقول الذهب -->
       <div id="goldFieldsBox" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-3.5 space-y-3">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-extrabold text-amber-900">بيانات الذهب (القيمة المملوكة تُحسب بسعر الجرام الحالي)</span>
+          <span class="text-xs font-extrabold text-amber-900">بيانات الذهب (يُسحب السعر الحالي تلقائياً من الإعدادات المالية)</span>
           <button type="button" onclick="fillSuggestedGoldPrice()" class="text-[11px] font-extrabold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg">
-            سعر استرشادي
+            جلب السعر من الإعدادات
           </button>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <div>
             <label class="block text-[11px] font-bold text-slate-700 mb-1">العيار</label>
-            <select id="goldKaratInput" class="w-full bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs font-extrabold">
+            <select id="goldKaratInput" onchange="fillSuggestedGoldPrice()" class="w-full bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs font-extrabold">
               <option value="24">عيار 24</option>
               <option value="21" selected>عيار 21</option>
               <option value="18">عيار 18</option>
@@ -711,9 +796,8 @@
         </div>
       </div>
 
-      <!-- القيمة الإجمالية (مخفية للعقار لأنها محسوبة بالأعلى) -->
       <div id="generalAssetValueBox">
-        <label class="block text-xs font-bold text-slate-700 mb-1">القيمة السوقية / تكلفة حصتي</label>
+        <label class="block text-xs font-bold text-slate-700 mb-1">القيمة السوقية الحالية</label>
         <input type="number" id="assetValueInput" step="any" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-black" />
       </div>
 
@@ -734,7 +818,7 @@
     </div>
   </div>
 
-  <!-- 4. نافذة سداد دفعة عقار (الدفع المركب) -->
+  <!-- 4. نافذة سداد دفعة عقار (تسمح بالسلف / الرصيد السالب في الكاش) -->
   <div id="assetPayModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -812,6 +896,8 @@
         </div>
       </div>
 
+      <!-- تنبيه السلف / الرصيد السالب -->
+      <div id="payBorrowWarningBox" class="hidden bg-rose-50 border-2 border-rose-300 text-rose-900 rounded-2xl p-3.5 text-xs font-bold space-y-1"></div>
       <div id="payErrorText" class="text-xs font-bold text-rose-600"></div>
 
       <button id="btnConfirmAssetPay" onclick="executeAssetPayment()" disabled
@@ -821,19 +907,18 @@
     </div>
   </div>
 
-  <!-- 5. نافذة بيع الذهب أو الأرض وتحويل العائد لخزنة المدخرات -->
+  <!-- 5. نافذة بيع الذهب أو الأرض أو الأصل المخصص -->
   <div id="sellAssetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
           <h3 class="text-base font-black text-slate-900" id="sellModalHeading">بيع أصل وتحويله للكاش</h3>
-          <p class="text-xs text-slate-500" id="sellModalSub">سيُودع صافي البيع تلقائياً في خزنة المدخرات</p>
+          <p class="text-xs text-slate-500">سيُودع صافي البيع تلقائياً في خزنة المدخرات</p>
         </div>
         <button onclick="closeModal('sellAssetModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <input type="hidden" id="sellTargetAssetId" />
 
-      <!-- حقول بيع الذهب -->
       <div id="sellGoldFields" class="space-y-3">
         <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs flex justify-between">
           <span>الوزن المتاح للبيع:</span>
@@ -851,19 +936,17 @@
         </div>
       </div>
 
-      <!-- حقول بيع الأرض -->
       <div id="sellLandFields" class="hidden space-y-3">
         <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1">
           <div class="flex justify-between"><span>تكلفة حصتك عند الشراء:</span><strong id="sellLandCostHint">0</strong></div>
           <div class="flex justify-between"><span>نسبة حصتك:</span><strong id="sellLandPctHint">100%</strong></div>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">سعر بيع الأرض بالكامل (أو حصتك)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1">سعر البيع الإجمالي</label>
           <input type="number" id="sellLandTotalPriceInput" step="any" oninput="calcSellPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-black" />
         </div>
       </div>
 
-      <!-- ملخص نتيجة البيع -->
       <div class="bg-slate-900 text-white rounded-2xl p-4 space-y-1.5 text-xs">
         <div class="flex justify-between">
           <span class="text-slate-300">المبلغ الذي سيُضاف لخزنة المدخرات (كاش):</span>
@@ -934,6 +1017,7 @@
     let currentUser = null;
     let authMode = 'login';
     let syncTimer = null;
+    let activeTab = 'dashboard';
 
     function setSyncBadge(status, text) {
       const el = document.getElementById('syncStatusBadge');
@@ -970,12 +1054,9 @@
       btn.textContent = 'جارٍ التحقق...';
 
       try {
-        let res;
-        if (authMode === 'signup') {
-          res = await sbClient.auth.signUp({ email, password });
-        } else {
-          res = await sbClient.auth.signInWithPassword({ email, password });
-        }
+        let res = authMode === 'signup'
+          ? await sbClient.auth.signUp({ email, password })
+          : await sbClient.auth.signInWithPassword({ email, password });
 
         if (res.error) throw res.error;
 
@@ -1038,20 +1119,14 @@
     }
 
     async function registerBiometrics() {
-      if (!currentUser) return;
-      if (!window.PublicKeyCredential) {
-        showToast('متصفحك لا يدعم البصمة (يتطلب HTTPS)');
-        return;
-      }
+      if (!currentUser || !window.PublicKeyCredential) { showToast('متصفحك لا يدعم البصمة'); return; }
       try {
-        const challenge = new Uint8Array(32);
-        crypto.getRandomValues(challenge);
-        const userIdBytes = new TextEncoder().encode(currentUser.id);
+        const challenge = new Uint8Array(32); crypto.getRandomValues(challenge);
         const cred = await navigator.credentials.create({
           publicKey: {
             challenge,
             rp: { name: 'مصروفي', id: window.location.hostname || 'localhost' },
-            user: { id: userIdBytes, name: currentUser.email, displayName: 'مستخدم مصروفي' },
+            user: { id: new TextEncoder().encode(currentUser.id), name: currentUser.email, displayName: 'مستخدم مصروفي' },
             pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
             authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
             timeout: 60000
@@ -1059,12 +1134,9 @@
         });
         if (cred) {
           localStorage.setItem('masroofy_bio_' + currentUser.id, btoa(String.fromCharCode(...new Uint8Array(cred.rawId))));
-          updateBiometricUI();
-          showToast('تم تفعيل الدخول بالبصمة بنجاح!');
+          updateBiometricUI(); showToast('تم تفعيل الدخول بالبصمة بنجاح!');
         }
-      } catch (err) {
-        showToast('تعذر تفعيل البصمة: تأكد أن الموقع يعمل عبر HTTPS');
-      }
+      } catch (err) { showToast('تعذر تفعيل البصمة'); }
     }
 
     async function unlockWithBiometrics() {
@@ -1072,8 +1144,7 @@
       const storedId = localStorage.getItem('masroofy_bio_' + currentUser.id);
       if (!storedId) { document.getElementById('biometricLockScreen').classList.add('hidden'); return; }
       try {
-        const challenge = new Uint8Array(32);
-        crypto.getRandomValues(challenge);
+        const challenge = new Uint8Array(32); crypto.getRandomValues(challenge);
         const rawId = Uint8Array.from(atob(storedId), c => c.charCodeAt(0));
         const assertion = await navigator.credentials.get({
           publicKey: { challenge, allowCredentials: [{ type: 'public-key', id: rawId }], userVerification: 'required', timeout: 60000 }
@@ -1083,16 +1154,13 @@
           document.getElementById('biometricLockScreen').classList.remove('flex');
           showToast('تم التحقق من البصمة بنجاح');
         }
-      } catch (err) {
-        showToast('فشل التحقق بالبصمة، حاول مرة أخرى');
-      }
+      } catch (err) { showToast('فشل التحقق بالبصمة'); }
     }
 
     function disableBiometrics() {
       if (!currentUser) return;
       localStorage.removeItem('masroofy_bio_' + currentUser.id);
-      updateBiometricUI();
-      showToast('تم إلغاء قفل البصمة');
+      updateBiometricUI(); showToast('تم إلغاء قفل البصمة');
     }
 
     // ================= 1. دعم PWA =================
@@ -1125,7 +1193,7 @@
     }
 
     // ================= 2. البيانات والحالة =================
-    const STORAGE_KEY = 'masroofy_clean_v7';
+    const STORAGE_KEY = 'masroofy_clean_v8';
     const CATEGORIES = [
       { id: 'food', name: 'طعام ومقاضي', color: '#10b981' },
       { id: 'housing', name: 'سكن وفواتير', color: '#3b82f6' },
@@ -1147,6 +1215,10 @@
         exchangeRate: 13.5,
         salarySAR: 7500,
         savingsTargetSAR: 3500,
+        goldPrices: {
+          EGP: { 24: 4650, 21: 4070, 18: 3488 },
+          SAR: { 24: 345, 21: 302, 18: 259 }
+        },
         budgetsSAR: { food: 1200, housing: 1500, transport: 500, health: 300, shopping: 400, family: 400, other: 200 },
         confirmedSalaryMonths: [],
         dismissedSalaryMonths: [],
@@ -1159,8 +1231,13 @@
 
     function loadLocalState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('masroofy_clean_v6');
-        return raw ? { ...getDefaultState(), ...JSON.parse(raw) } : getDefaultState();
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('masroofy_clean_v7') || localStorage.getItem('masroofy_clean_v6');
+        const parsed = raw ? JSON.parse(raw) : {};
+        return {
+          ...getDefaultState(),
+          ...parsed,
+          goldPrices: { ...getDefaultState().goldPrices, ...(parsed.goldPrices || {}) }
+        };
       } catch (e) { return getDefaultState(); }
     }
 
@@ -1173,7 +1250,11 @@
         const { data, error } = await sbClient.from('masroofy_state').select('app_data').eq('user_id', currentUser.id).maybeSingle();
         if (error) throw error;
         if (data && data.app_data) {
-          appState = { ...getDefaultState(), ...data.app_data };
+          appState = {
+            ...getDefaultState(),
+            ...data.app_data,
+            goldPrices: { ...getDefaultState().goldPrices, ...(data.app_data.goldPrices || {}) }
+          };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
           setSyncBadge('synced', 'محفوظ سحابياً ✓');
         } else {
@@ -1201,7 +1282,18 @@
       syncTimer = setTimeout(() => { pushStateToCloud(); }, 400);
     }
 
-    // ================= 3. العملات والتحويل =================
+    // ================= 3. نظام ألوان شريط التقدم الموحد =================
+    // <=25% أزرق | <=50% سماوي | <=75% أخضر | <=80% أصفر | <=90% برتقالي | <=100% أحمر
+    function getUnifiedProgressStyle(pct) {
+      if (pct <= 25) return { bar: 'bg-sky-500', badge: 'bg-sky-50 text-sky-700 border-sky-200', label: 'ممتاز (أقل من 25%)' };
+      if (pct <= 50) return { bar: 'bg-teal-500', badge: 'bg-teal-50 text-teal-700 border-teal-200', label: 'جيد (حتى 50%)' };
+      if (pct <= 75) return { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'متوازن (حتى 75%)' };
+      if (pct <= 80) return { bar: 'bg-yellow-500', badge: 'bg-yellow-50 text-yellow-800 border-yellow-300', label: 'تنبيه 80%' };
+      if (pct <= 90) return { bar: 'bg-orange-500', badge: 'bg-orange-50 text-orange-800 border-orange-300', label: 'اقتربت من الحد (90%)' };
+      return { bar: 'bg-rose-600', badge: 'bg-rose-50 text-rose-700 border-rose-300', label: 'الحد الأقصى (100%)' };
+    }
+
+    // ================= 4. العملات والتحويل =================
     function convertAmount(val, from, to) {
       const n = Number(val) || 0;
       if (from === to) return n;
@@ -1228,6 +1320,7 @@
     function closeModal(id) { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } }
 
     function switchTab(tabId) {
+      activeTab = tabId;
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('tab-' + tabId)?.classList.add('active');
       document.querySelectorAll('.nav-tab').forEach(b => {
@@ -1244,7 +1337,7 @@
       refreshAll();
     }
 
-    // ================= 4. حسابات المدخرات والأصول (المحدثة) =================
+    // ================= 5. حسابات المدخرات والأصول (يدعم السالب للسلف) =================
     function getVaultBalances() {
       let sar = 0, egp = 0;
       (appState.transactions || []).forEach(t => {
@@ -1253,42 +1346,41 @@
           else sar += Number(t.amount) || 0;
         }
       });
-      return { sar: Math.max(0, sar), egp: Math.max(0, egp) };
+      // إزالة Math.max(0) للسماح بالرصيد السالب عند الاستلاف
+      return { sar, egp };
     }
 
-    // القيمة السوقية الحالية للأصل
     function getAssetMarketVal(a) {
       if (a.category === 'gold' && a.goldDetails) {
         const rem = Number(a.goldDetails.remainingGrams) || 0;
         const nowP = Number(a.goldDetails.currentPricePerGram) || Number(a.goldDetails.buyPricePerGram) || 0;
         return rem * nowP;
       }
-      if (a.category === 'land' && a.sold) return 0;
+      if (a.sold) return 0;
       return Number(a.totalValue) || 0;
     }
 
-    // حصتي المملوكة فعلياً في الأصل الآن (للمدخرات والثروة)
     function getAssetOwnedVal(a) {
-      if (a.category === 'gold' && a.goldDetails) {
-        // الذهب المملوك يُحسب بالسعر الحالي مضروباً في الجرامات المتبقية
-        return getAssetMarketVal(a);
-      }
+      if (a.sold) return 0;
+      if (a.category === 'gold' && a.goldDetails) return getAssetMarketVal(a);
       if (a.category === 'realestate') {
         if (Array.isArray(a.milestones) && a.milestones.length > 0) {
           return a.milestones.filter(m => m.paid).reduce((s, m) => s + (Number(m.amount) || 0), 0);
         }
         return Number(a.totalValue) || 0;
       }
-      if (a.category === 'land') {
-        if (a.sold) return 0;
-        return Number(a.totalValue) || 0;
-      }
       return Number(a.totalValue) || 0;
     }
 
-    // ================= 5. التذكيرات =================
+    // ================= 6. التذكيرات (تظهر في لوحة التحكم والأصول والعقارات فقط) =================
     function renderReminders() {
       const area = document.getElementById('remindersArea');
+      // إخفاء التذكيرات في الميزانيات، سجل الحركات، المدخرات والثروة، الالتزامات، الإعدادات
+      if (activeTab !== 'dashboard' && activeTab !== 'assets') {
+        area.innerHTML = '';
+        return;
+      }
+
       let html = '';
       const today = new Date();
       const todayStr = today.toISOString().slice(0, 10);
@@ -1310,7 +1402,6 @@
         `;
       }
 
-      // تذكير بالدفعات العقارية المستحقة أو القريبة (خلال 7 أيام)
       const nextWeekStr = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
       (appState.assets || []).filter(a => a.category === 'realestate' && Array.isArray(a.milestones)).forEach(a => {
         const dueM = a.milestones.find(m => !m.paid && m.date && m.date <= nextWeekStr);
@@ -1344,7 +1435,7 @@
     function dismissSalary(m) { appState.dismissedSalaryMonths.push(m); simSalary = false; saveState(); refreshAll(); }
     function triggerSalaryReminderDemo() { simSalary = true; switchTab('dashboard'); }
 
-    // ================= 6. الحركات المالية =================
+    // ================= 7. الحركات المالية + معاينة الميزانية الفورية =================
     function fillCategoryOptions() {
       const opts = CATEGORIES.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
       const el1 = document.getElementById('txFormCategory');
@@ -1360,6 +1451,58 @@
       document.getElementById('btnTxSavings').className = t === 'savings' ? 'py-2 rounded-xl text-xs font-extrabold border-2 border-indigo-500 bg-indigo-50 text-indigo-700' : 'py-2 rounded-xl text-xs font-extrabold border border-slate-200 text-slate-600';
       document.getElementById('txFormCatBox').classList.toggle('hidden', t !== 'expense');
       document.getElementById('txFormNoteLabel').textContent = t === 'income' ? 'مصدر الدخل الإضافي' : 'ملاحظة';
+      if (t === 'expense') updateTxBudgetPreview();
+    }
+
+    function updateTxBudgetPreview() {
+      const type = document.getElementById('txFormType').value;
+      if (type !== 'expense') return;
+
+      const catId = document.getElementById('txFormCategory').value || 'food';
+      const catObj = CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
+      const disp = appState.currency;
+      const editId = document.getElementById('txEditId').value;
+      const dateVal = document.getElementById('txFormDate').value || selectedMonth + '-01';
+      const txMonth = dateVal.slice(0, 7);
+
+      const amount = Number(document.getElementById('txFormAmount').value) || 0;
+      const curr = document.getElementById('txFormCurrency').value || disp;
+      const newAmtDisp = convertAmount(amount, curr, disp);
+
+      // حساب المصروف السابق في نفس التصنيف ونفس الشهر
+      let prevSpentDisp = 0;
+      (appState.transactions || []).forEach(t => {
+        if (t.id === editId) return;
+        if (t.type === 'expense' && (t.category || 'other') === catId && t.date && t.date.startsWith(txMonth)) {
+          prevSpentDisp += convertAmount(t.amount, t.currency || 'SAR', disp);
+        }
+      });
+
+      const budgetDisp = convertAmount(appState.budgetsSAR[catId] || 0, 'SAR', disp);
+      const totalAfter = prevSpentDisp + newAmtDisp;
+      const remainingTo100 = budgetDisp - totalAfter;
+      const pct = budgetDisp > 0 ? Math.round((totalAfter / budgetDisp) * 100) : 0;
+      const barWidth = Math.min(100, Math.max(0, pct));
+      const style = getUnifiedProgressStyle(pct);
+
+      document.getElementById('txPrevCatTitle').textContent = `ميزانية «${catObj.name}» (${formatMoney(budgetDisp, disp)})`;
+      const badgeEl = document.getElementById('txPrevPctBadge');
+      badgeEl.textContent = `${pct}%`;
+      badgeEl.className = `font-black px-2 py-0.5 rounded-lg text-[11px] border ${style.badge}`;
+
+      const barEl = document.getElementById('txPrevProgressBar');
+      barEl.style.width = `${barWidth}%`;
+      barEl.className = `h-full rounded-full transition-all duration-300 ${style.bar}`;
+
+      document.getElementById('txPrevSpentText').textContent = `الإجمالي بعد الحركة: ${formatMoney(totalAfter, disp)}`;
+      const remEl = document.getElementById('txPrevRemainingText');
+      if (remainingTo100 >= 0) {
+        remEl.textContent = `متبقي للوصول إلى 100%: ${formatMoney(remainingTo100, disp)}`;
+        remEl.className = 'text-emerald-700 font-extrabold';
+      } else {
+        remEl.textContent = `تجاوزت الميزانية بـ: ${formatMoney(Math.abs(remainingTo100), disp)}`;
+        remEl.className = 'text-rose-600 font-extrabold';
+      }
     }
 
     function openTransactionModal(type = 'expense', editId = null) {
@@ -1375,6 +1518,7 @@
           document.getElementById('txFormCategory').value = tx.category || 'food';
           document.getElementById('txFormDate').value = tx.date;
           document.getElementById('txFormNote').value = tx.note || '';
+          updateTxBudgetPreview();
           openModal('transactionModal');
           return;
         }
@@ -1385,6 +1529,7 @@
       document.getElementById('txFormCurrency').value = appState.currency;
       document.getElementById('txFormDate').value = new Date().toISOString().slice(0, 10);
       document.getElementById('txFormNote').value = '';
+      updateTxBudgetPreview();
       openModal('transactionModal');
     }
 
@@ -1418,8 +1563,9 @@
     function renderTxRow(tx) {
       const isExp = tx.type === 'expense';
       const isInc = tx.type === 'income';
-      const tagClass = isExp ? 'bg-rose-50 text-rose-700' : isInc ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-50 text-indigo-700';
-      const tagName = isExp ? 'مصروف' : isInc ? 'دخل' : 'ادخار';
+      const isNegSav = tx.type === 'savings' && Number(tx.amount) < 0;
+      const tagClass = isExp || isNegSav ? 'bg-rose-50 text-rose-700' : isInc ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-50 text-indigo-700';
+      const tagName = isExp ? 'مصروف' : isInc ? 'دخل' : (isNegSav ? 'سحب / سلف' : 'ادخار');
       const cat = CATEGORIES.find(c => c.id === tx.category);
 
       return `
@@ -1432,8 +1578,8 @@
             </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <span class="text-xs sm:text-sm font-black ${isExp ? 'text-rose-600' : isInc ? 'text-emerald-700' : 'text-indigo-700'}">
-              ${isExp ? '-' : '+'}${formatMoney(tx.amount, tx.currency || 'SAR')}
+            <span class="text-xs sm:text-sm font-black ${isExp || isNegSav ? 'text-rose-600' : isInc ? 'text-emerald-700' : 'text-indigo-700'}">
+              ${isExp ? '-' : (Number(tx.amount) >= 0 ? '+' : '')}${formatMoney(tx.amount, tx.currency || 'SAR')}
             </span>
             <button onclick="openTransactionModal('${tx.type}', '${tx.id}')" class="p-1.5 text-slate-500 hover:text-indigo-600"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
             <button onclick="deleteTx('${tx.id}')" class="p-1.5 text-slate-400 hover:text-rose-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
@@ -1442,14 +1588,20 @@
       `;
     }
 
-    // ================= 7. الأصول والعقارات (جدول الدفعات) والذهب والأراضي =================
+    // ================= 8. الأصول والعقارات والذهب والأراضي والأصل المخصص =================
     function onAssetCatChange() {
       const cat = document.getElementById('assetCatInput').value;
       document.getElementById('realestateFieldsBox').classList.toggle('hidden', cat !== 'realestate');
       document.getElementById('goldFieldsBox').classList.toggle('hidden', cat !== 'gold');
       document.getElementById('landFieldsBox').classList.toggle('hidden', cat !== 'land');
+      document.getElementById('customFieldsBox').classList.toggle('hidden', cat !== 'custom');
       document.getElementById('generalAssetValueBox').classList.toggle('hidden', cat === 'realestate');
       if (cat === 'land') toggleLandShareBox();
+      if (cat === 'gold') fillSuggestedGoldPrice();
+    }
+
+    function onAssetCurrChange() {
+      if (document.getElementById('assetCatInput').value === 'gold') fillSuggestedGoldPrice();
     }
 
     function calcRealEstatePrice() {
@@ -1498,13 +1650,15 @@
     }
 
     function fillSuggestedGoldPrice() {
-      const curr = document.getElementById('assetCurrInput').value;
+      const curr = document.getElementById('assetCurrInput').value || 'EGP';
       const karat = Number(document.getElementById('goldKaratInput').value) || 21;
-      const base24 = curr === 'SAR' ? 345 : 4650;
-      const price = Math.round(base24 * (karat / 24));
-      document.getElementById('goldNowPriceInput').value = price;
-      if (!document.getElementById('goldBuyPriceInput').value) document.getElementById('goldBuyPriceInput').value = price;
-      calcGoldValue();
+      const gp = appState.goldPrices?.[curr] || getDefaultState().goldPrices[curr];
+      const price = Number(gp?.[karat]) || 0;
+      if (price > 0) {
+        document.getElementById('goldNowPriceInput').value = price;
+        if (!document.getElementById('goldBuyPriceInput').value) document.getElementById('goldBuyPriceInput').value = price;
+        calcGoldValue();
+      }
     }
 
     function calcGoldValue() {
@@ -1547,6 +1701,12 @@
             document.getElementById('landPercentInput').value = a.landDetails.sharePercent || 100;
             toggleLandShareBox();
           }
+          if (a.category === 'custom' && a.customDetails) {
+            document.getElementById('customSubTypeInput').value = a.customDetails.subType || '';
+            document.getElementById('customBuyCostInput').value = a.customDetails.buyCost || a.totalValue;
+            document.getElementById('customSharePctInput').value = a.customDetails.sharePercent || 100;
+            document.getElementById('customNotesInput').value = a.customDetails.notes || '';
+          }
           openModal('assetModal');
           return;
         }
@@ -1562,6 +1722,10 @@
       document.getElementById('reDistinctionInput').value = '1';
       document.getElementById('reTotalPriceInput').value = '';
       document.getElementById('rePostHandoverNote').value = '';
+      document.getElementById('customSubTypeInput').value = '';
+      document.getElementById('customBuyCostInput').value = '';
+      document.getElementById('customSharePctInput').value = '100';
+      document.getElementById('customNotesInput').value = '';
       addMilestoneRow({ id: 'ms_' + Date.now(), date: new Date().toISOString().slice(0, 10), title: 'مقدم الحجز', amount: '', paid: true });
       onAssetCatChange();
       openModal('assetModal');
@@ -1630,32 +1794,30 @@
         };
       }
 
+      if (category === 'custom') {
+        const buyCost = Number(document.getElementById('customBuyCostInput').value) || totalValue;
+        const sharePercent = Number(document.getElementById('customSharePctInput').value) || 100;
+        asset.customDetails = {
+          subType: document.getElementById('customSubTypeInput').value.trim() || 'استثمار مخصص',
+          buyCost,
+          sharePercent,
+          notes: document.getElementById('customNotesInput').value.trim()
+        };
+      }
+
       if (old) {
         const idx = appState.assets.findIndex(x => x.id === old.id);
         appState.assets[idx] = asset;
         showToast('تم تعديل الأصل');
       } else {
         appState.assets.push(asset);
-        showToast('تمت إضافة الأصل');
+        showToast('تمت إضافة الأصل في تصنيفه');
       }
       saveState(); closeModal('assetModal'); refreshAll();
     }
 
     function deleteAsset(id) { appState.assets = appState.assets.filter(x => x.id !== id); saveState(); closeModal('assetDetailsModal'); refreshAll(); showToast('تم حذف الأصل'); }
 
-    // زر سريع لتحديث سعر الجرام الحالي للذهب
-    function quickUpdateGoldPrice(assetId) {
-      const a = appState.assets.find(x => x.id === assetId);
-      if (!a || !a.goldDetails) return;
-      const newP = prompt(`أدخل سعر جرام الذهب الحالي (${a.currency}) لـ «${a.name}»:`, a.goldDetails.currentPricePerGram);
-      if (newP !== null && Number(newP) > 0) {
-        a.goldDetails.currentPricePerGram = Number(newP);
-        a.totalValue = Math.round(a.goldDetails.remainingGrams * Number(newP));
-        saveState(); refreshAll(); showToast('تم تحديث سعر الجرام وحساب الأرباح');
-      }
-    }
-
-    // استيراد جدول الشقة الـ 149 متر من صورة الجدول مباشرة
     function importUserApartmentPreset() {
       const exists = (appState.assets || []).some(a => a.id === 'preset_apt_149');
       if (exists) { showToast('الشقة 149م مضافة بالفعل في قائمة الأصول'); switchTab('assets'); return; }
@@ -1698,7 +1860,12 @@
 
     function openCategoryDetails(cat) {
       const items = (appState.assets || []).filter(a => a.category === cat);
-      const names = { realestate: 'تفاصيل العقارات والشقق', gold: 'تفاصيل الذهب والسبائك', land: 'تفاصيل الأراضي' };
+      const names = {
+        realestate: 'تفاصيل العقارات والشقق',
+        gold: 'تفاصيل الذهب والسبائك',
+        land: 'تفاصيل الأراضي',
+        custom: 'تفاصيل الأصول المخصصة والاستثمارات'
+      };
       document.getElementById('assetDetailsHeading').textContent = names[cat] || 'تفاصيل الأصول';
       document.getElementById('assetDetailsContent').innerHTML = items.length
         ? items.map(renderAssetCard).join('')
@@ -1708,10 +1875,9 @@
     }
 
     function renderAssetCard(a) {
-      const mVal = getAssetMarketVal(a);
       const oVal = getAssetOwnedVal(a);
 
-      // 1. بطاقة العقارات الاحترافية (بجدول الدفعات)
+      // 1. بطاقة العقارات
       if (a.category === 'realestate') {
         const ms = a.milestones || [];
         const paidSum = ms.filter(m => m.paid).reduce((s, m) => s + (Number(m.amount) || 0), 0);
@@ -1740,7 +1906,6 @@
               </div>
             </div>
 
-            <!-- شريط الإحصائيات العقارية -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl p-3 text-xs">
               <div>
                 <span class="text-slate-500 block text-[11px]">إجمالي قيمة الوحدة</span>
@@ -1760,12 +1925,10 @@
               </div>
             </div>
 
-            <!-- شريط التقدم -->
             <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
               <div class="h-full bg-emerald-600 rounded-full" style="width: ${Math.min(100, ownPct)}%"></div>
             </div>
 
-            <!-- جدول الدفعات -->
             ${ms.length ? `
               <div class="overflow-x-auto border border-slate-200 rounded-2xl max-h-80 overflow-y-auto">
                 <table class="w-full text-xs text-right">
@@ -1801,7 +1964,7 @@
         `;
       }
 
-      // 2. بطاقة الذهب (السعر الحالي + المكسب/الخسارة + زر البيع)
+      // 2. بطاقة الذهب
       if (a.category === 'gold' && a.goldDetails) {
         const g = a.goldDetails;
         const buyTotal = g.remainingGrams * g.buyPricePerGram;
@@ -1817,10 +1980,9 @@
                   <span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg">ذهب عيار ${g.karat}</span>
                   <h4 class="text-sm font-black text-slate-900">${a.name}</h4>
                 </div>
-                <p class="text-xs text-slate-500 mt-1">الوزن المتاح: <strong>${g.remainingGrams} جم</strong> • سعر الشراء: <strong>${formatMoney(g.buyPricePerGram, a.currency)}</strong> • السعر الحالي: <strong class="text-emerald-700">${formatMoney(g.currentPricePerGram, a.currency)}</strong></p>
+                <p class="text-xs text-slate-500 mt-1">الوزن المتاح: <strong>${g.remainingGrams} جم</strong> • سعر الشراء: <strong>${formatMoney(g.buyPricePerGram, a.currency)}</strong> • السعر الحالي (من الإعدادات): <strong class="text-emerald-700">${formatMoney(g.currentPricePerGram, a.currency)}</strong></p>
               </div>
               <div class="flex flex-wrap gap-1.5">
-                <button onclick="quickUpdateGoldPrice('${a.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-950 text-xs font-extrabold px-2.5 py-1.5 rounded-xl">تحديث السعر</button>
                 ${g.remainingGrams > 0 ? `<button onclick="openSellAssetModal('${a.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl">بيع ذهب</button>` : ''}
                 <button onclick="closeModal('assetDetailsModal'); openAssetModal('${a.id}')" class="bg-slate-100 text-slate-700 p-1.5 rounded-xl"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                 <button onclick="deleteAsset('${a.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-xl"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
@@ -1847,7 +2009,49 @@
         `;
       }
 
-      // 3. بطاقة الأرض (مع زر البيع وتحويل العائد للكاش)
+      // 3. بطاقة الأصل المخصص (بورصة / شهادات / إلخ)
+      if (a.category === 'custom') {
+        const cd = a.customDetails || {};
+        const buyCost = Number(cd.buyCost) || Number(a.totalValue) || 0;
+        const pl = oVal - buyCost;
+        const isSold = !!a.sold;
+
+        return `
+          <div class="border border-purple-200 rounded-2xl p-4 bg-white space-y-3 shadow-2xs">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="bg-purple-100 text-purple-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg">${cd.subType || 'أصل مخصص'}</span>
+                  <h4 class="text-sm font-black text-slate-900">${a.name}</h4>
+                  ${isSold ? `<span class="bg-slate-800 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md">مباع ✓</span>` : ''}
+                </div>
+                ${cd.notes ? `<p class="text-xs text-slate-500 mt-1">${cd.notes}</p>` : ''}
+              </div>
+              <div class="flex gap-1.5">
+                ${!isSold ? `<button onclick="openSellAssetModal('${a.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl">بيع / تصفية للكاش</button>` : ''}
+                <button onclick="closeModal('assetDetailsModal'); openAssetModal('${a.id}')" class="bg-slate-100 text-slate-700 p-1.5 rounded-xl"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                <button onclick="deleteAsset('${a.id}')" class="bg-rose-50 text-rose-600 p-1.5 rounded-xl"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 bg-purple-50/50 border border-purple-200/70 rounded-xl p-3 text-xs">
+              <div>
+                <span class="text-slate-500 block text-[11px]">التكلفة / رأس المال</span>
+                <strong class="font-black text-slate-800">${formatMoney(buyCost, a.currency)}</strong>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[11px]">القيمة السوقية الحالية</span>
+                <strong class="font-black text-slate-900">${formatMoney(oVal, a.currency)}</strong>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[11px]">الربح / الخسارة</span>
+                <strong class="font-black ${pl >= 0 ? 'text-emerald-700' : 'text-rose-600'}">${pl >= 0 ? '+' : ''}${formatMoney(pl, a.currency)}</strong>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 4. بطاقة الأرض
       const isSold = !!a.sold;
       return `
         <div class="border border-slate-200 rounded-2xl p-4 bg-white space-y-2.5 shadow-2xs">
@@ -1873,7 +2077,7 @@
       `;
     }
 
-    // ================= 8. سداد دفعات العقارات (الدفع المركب) =================
+    // ================= 9. سداد دفعات العقارات (يقبل السلف / الرصيد السالب في الكاش) =================
     function openAssetPayModal(assetId, milestoneId) {
       const a = appState.assets.find(x => x.id === assetId);
       const ms = a?.milestones?.find(m => m.id === milestoneId);
@@ -1933,8 +2137,7 @@
       const extraSrc = document.getElementById('payExtraSrc').value.trim();
 
       const errs = [];
-      if (useSAR > v.sar) errs.push('المسحوب من خزنة SAR يتجاوز المتاح');
-      if (useEGP > v.egp) errs.push('المسحوب من خزنة EGP يتجاوز المتاح');
+      // نتحقق فقط من عدم بيع ذهب غير موجود ومن إدخال مصدر للدخل الإضافي
       if (grams > 0 && (!g || grams > g.goldDetails.remainingGrams)) errs.push('عدد الجرامات المباعة يتجاوز المتاح');
       if (extraAmt > 0 && !extraSrc) errs.push('يجب كتابة مصدر المبلغ الإضافي');
 
@@ -1944,6 +2147,32 @@
       const covered = sarConv + egpConv + goldConv + extraAmt;
 
       document.getElementById('payCoveredDisplay').textContent = formatMoney(covered, a.currency);
+
+      // حساب العجز / السلف (إذا كان المسحوب من الخزنة أكبر من المتاح أو إذا لم يغطِ المستخدم كامل الدفعة)
+      const sarAfter = v.sar - useSAR;
+      const egpAfter = v.egp - useEGP;
+      const shortfallInAssetCurr = Math.max(0, req - covered);
+
+      let finalSAR = sarAfter;
+      let finalEGP = egpAfter;
+      if (shortfallInAssetCurr > 0) {
+        if (a.currency === 'SAR') finalSAR -= shortfallInAssetCurr;
+        else finalEGP -= shortfallInAssetCurr;
+      }
+
+      const borrowBox = document.getElementById('payBorrowWarningBox');
+      if (finalSAR < 0 || finalEGP < 0) {
+        const negDetails = [];
+        if (finalSAR < 0) negDetails.push(`خزنة SAR ستصبح: ${formatMoney(finalSAR, 'SAR')}`);
+        if (finalEGP < 0) negDetails.push(`خزنة EGP ستصبح: ${formatMoney(finalEGP, 'EGP')}`);
+        borrowBox.innerHTML = `
+          <div>⚠️ <strong>تنبيه سلف / عجز نقدي:</strong> الفلوس المتاحة لا تكفي بالكامل.</div>
+          <div>سيتم قبول السداد وتسجيل العجز بالسالب في مدخراتك الكاش (${negDetails.join(' | ')})، وهذا يعني أنك <strong>مستلف هذا المبلغ</strong>.</div>
+        `;
+        borrowBox.classList.remove('hidden');
+      } else {
+        borrowBox.classList.add('hidden');
+      }
 
       const surplusBox = document.getElementById('payGoldSurplusBox');
       const neededFromGold = Math.max(0, req - (sarConv + egpConv + extraAmt));
@@ -1955,7 +2184,6 @@
         surplusBox.classList.add('hidden');
       }
 
-      if (covered + 0.5 < req) errs.push(`المتبقي لتغطية الدفعة: ${formatMoney(req - covered, a.currency)}`);
       document.getElementById('payErrorText').textContent = errs[0] || '';
       document.getElementById('btnConfirmAssetPay').disabled = errs.length > 0;
     }
@@ -1975,15 +2203,31 @@
       const extraSrc = document.getElementById('payExtraSrc').value.trim();
       const todayStr = new Date().toISOString().slice(0, 10);
 
-      if (useSAR > 0) appState.transactions.unshift({ id: 'tx_' + Date.now() + '_s', type: 'savings', amount: -useSAR, currency: 'SAR', date: todayStr, note: `سداد ${ms.title} - ${a.name}` });
-      if (useEGP > 0) appState.transactions.unshift({ id: 'tx_' + Date.now() + '_e', type: 'savings', amount: -useEGP, currency: 'EGP', date: todayStr, note: `سداد ${ms.title} - ${a.name}` });
+      const sarConv = convertAmount(useSAR, 'SAR', a.currency);
+      const egpConv = convertAmount(useEGP, 'EGP', a.currency);
+      const goldConv = g ? convertAmount(grams * gPrice, g.currency, a.currency) : 0;
+      const covered = sarConv + egpConv + goldConv + extraAmt;
+      const shortfall = Math.max(0, req - covered);
+
+      if (useSAR > 0) {
+        appState.transactions.unshift({ id: 'tx_' + Date.now() + '_s', type: 'savings', amount: -useSAR, currency: 'SAR', date: todayStr, note: `سداد ${ms.title} - ${a.name}` });
+      }
+      if (useEGP > 0) {
+        appState.transactions.unshift({ id: 'tx_' + Date.now() + '_e', type: 'savings', amount: -useEGP, currency: 'EGP', date: todayStr, note: `سداد ${ms.title} - ${a.name}` });
+      }
+      // إذا كان هناك عجز غير مغطى، يُخصم تلقائياً من خزنة الكاش ليصبح بالسالب (سلف)
+      if (shortfall > 0.1) {
+        appState.transactions.unshift({
+          id: 'tx_' + Date.now() + '_b', type: 'savings', amount: -Math.round(shortfall), currency: a.currency, date: todayStr,
+          note: `سلف / عجز سداد ${ms.title} - ${a.name}`
+        });
+      }
 
       if (grams > 0 && g) {
         g.goldDetails.remainingGrams = Math.max(0, Number((g.goldDetails.remainingGrams - grams).toFixed(3)));
         g.goldDetails.totalSoldRevenue = (g.goldDetails.totalSoldRevenue || 0) + (grams * gPrice);
         g.goldDetails.totalSoldCostBasis = (g.goldDetails.totalSoldCostBasis || 0) + (grams * g.goldDetails.buyPricePerGram);
-        const goldConv = convertAmount(grams * gPrice, g.currency, a.currency);
-        const neededFromGold = Math.max(0, req - (convertAmount(useSAR, 'SAR', a.currency) + convertAmount(useEGP, 'EGP', a.currency) + extraAmt));
+        const neededFromGold = Math.max(0, req - (sarConv + egpConv + extraAmt));
         if (goldConv > neededFromGold + 0.5) {
           const surplus = Math.round(convertAmount(goldConv - neededFromGold, a.currency, g.currency));
           appState.transactions.unshift({ id: 'tx_' + Date.now() + '_g', type: 'savings', amount: surplus, currency: g.currency, date: todayStr, note: `فائض بيع ${grams} جم من ${g.name}` });
@@ -1996,10 +2240,10 @@
 
       ms.paid = true;
       saveState(); closeModal('assetPayModal'); refreshAll();
-      showToast('تم السداد وتحويل الدفعة إلى Done!');
+      showToast(shortfall > 0.1 ? 'تم السداد وتسجيل العجز بالسالب في المدخرات!' : 'تم السداد وتحويل الدفعة إلى Done!');
     }
 
-    // ================= 9. بيع الذهب والأراضي وإيداع العائد في خزنة المدخرات =================
+    // ================= 10. بيع الذهب والأراضي والأصول المخصصة =================
     function openSellAssetModal(assetId) {
       const a = appState.assets.find(x => x.id === assetId);
       if (!a) return;
@@ -2013,12 +2257,13 @@
         document.getElementById('sellGoldAvailHint').textContent = `${a.goldDetails.remainingGrams} جم (${a.currency})`;
         document.getElementById('sellGoldGramsInput').value = a.goldDetails.remainingGrams;
         document.getElementById('sellGoldPriceInput').value = a.goldDetails.currentPricePerGram || a.goldDetails.buyPricePerGram;
-      } else if (a.category === 'land') {
-        document.getElementById('sellModalHeading').textContent = `بيع أرض: ${a.name}`;
+      } else {
+        document.getElementById('sellModalHeading').textContent = `بيع / تصفية: ${a.name}`;
         document.getElementById('sellGoldFields').classList.add('hidden');
         document.getElementById('sellLandFields').classList.remove('hidden');
-        const pct = a.landDetails?.sharePercent || 100;
-        document.getElementById('sellLandCostHint').textContent = formatMoney(a.totalValue, a.currency);
+        const pct = a.category === 'land' ? (a.landDetails?.sharePercent || 100) : (a.customDetails?.sharePercent || 100);
+        const cost = a.category === 'custom' ? (a.customDetails?.buyCost || a.totalValue) : a.totalValue;
+        document.getElementById('sellLandCostHint').textContent = formatMoney(cost, a.currency);
         document.getElementById('sellLandPctHint').textContent = `${pct}%`;
         document.getElementById('sellLandTotalPriceInput').value = a.landDetails?.ownershipType === 'partnership' ? (a.landDetails.fullLandPrice || a.totalValue) : a.totalValue;
       }
@@ -2036,11 +2281,14 @@
         const price = Number(document.getElementById('sellGoldPriceInput').value) || 0;
         netCash = grams * price;
         profitLoss = netCash - (grams * a.goldDetails.buyPricePerGram);
-      } else if (a.category === 'land') {
+      } else {
         const sellTotal = Number(document.getElementById('sellLandTotalPriceInput').value) || 0;
-        const pct = a.landDetails?.ownershipType === 'partnership' ? (Number(a.landDetails.sharePercent) || 100) / 100 : 1;
+        const pct = a.category === 'land' && a.landDetails?.ownershipType === 'partnership'
+          ? (Number(a.landDetails.sharePercent) || 100) / 100
+          : 1;
+        const cost = a.category === 'custom' ? (Number(a.customDetails?.buyCost) || Number(a.totalValue) || 0) : (Number(a.totalValue) || 0);
         netCash = sellTotal * pct;
-        profitLoss = netCash - (Number(a.totalValue) || 0);
+        profitLoss = netCash - cost;
       }
 
       document.getElementById('sellNetCashPreview').textContent = formatMoney(netCash, a.currency);
@@ -2070,47 +2318,35 @@
         a.goldDetails.totalSoldCostBasis = (a.goldDetails.totalSoldCostBasis || 0) + costBasis;
         a.totalValue = Math.round(a.goldDetails.remainingGrams * price);
 
-        // إيداع عائد البيع في خزنة المدخرات (الكاش)
         appState.transactions.unshift({
           id: 'tx_' + Date.now(), type: 'savings', amount: revenue, currency: a.currency, date: todayStr,
           note: `عائد بيع ${grams} جم من ${a.name}`
         });
 
-        appState.assetSalesHistory = appState.assetSalesHistory || [];
-        appState.assetSalesHistory.unshift({
-          id: 'sale_' + Date.now(), assetName: a.name, category: 'gold', currency: a.currency,
-          revenue, profitLoss: revenue - costBasis, date: todayStr
-        });
-
         showToast(`تم بيع ${grams} جم وإيداع ${formatMoney(revenue, a.currency)} في خزنة المدخرات!`);
-      } else if (a.category === 'land') {
+      } else {
         const sellTotal = Number(document.getElementById('sellLandTotalPriceInput').value) || 0;
         if (sellTotal <= 0) { showToast('أدخل سعر البيع'); return; }
-        const pct = a.landDetails?.ownershipType === 'partnership' ? (Number(a.landDetails.sharePercent) || 100) / 100 : 1;
+        const pct = a.category === 'land' && a.landDetails?.ownershipType === 'partnership'
+          ? (Number(a.landDetails.sharePercent) || 100) / 100
+          : 1;
         const revenue = Math.round(sellTotal * pct);
-        const costBasis = Number(a.totalValue) || 0;
 
         a.sold = true;
         a.soldRevenue = revenue;
 
         appState.transactions.unshift({
           id: 'tx_' + Date.now(), type: 'savings', amount: revenue, currency: a.currency, date: todayStr,
-          note: `عائد بيع أرض: ${a.name}`
+          note: `عائد بيع: ${a.name}`
         });
 
-        appState.assetSalesHistory = appState.assetSalesHistory || [];
-        appState.assetSalesHistory.unshift({
-          id: 'sale_' + Date.now(), assetName: a.name, category: 'land', currency: a.currency,
-          revenue, profitLoss: revenue - costBasis, date: todayStr
-        });
-
-        showToast(`تم بيع الأرض وإيداع ${formatMoney(revenue, a.currency)} في خزنة المدخرات!`);
+        showToast(`تم البيع وإيداع ${formatMoney(revenue, a.currency)} في خزنة المدخرات!`);
       }
 
       saveState(); closeModal('sellAssetModal'); refreshAll();
     }
 
-    // ================= 10. الالتزامات والميزانيات وحاسبة المصري =================
+    // ================= 11. الالتزامات والميزانيات وحاسبة المصري =================
     function openCommitmentModal(editId = null) {
       document.getElementById('commEditId').value = editId || '';
       if (editId) {
@@ -2170,18 +2406,18 @@
 
       document.getElementById('egpCalcBody').innerHTML = `
         <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2 text-xs">
-          <div class="flex justify-between"><span>خزنة الريال السعودي (كاش):</span><strong>${formatMoney(v.sar, 'SAR')}</strong></div>
+          <div class="flex justify-between"><span>خزنة الريال السعودي (كاش):</span><strong class="${v.sar < 0 ? 'text-rose-600' : ''}">${formatMoney(v.sar, 'SAR')}</strong></div>
           <div class="flex justify-between"><span>معادل الريال بالمصري (× ${appState.exchangeRate}):</span><strong>${formatMoney(sarInEGP, 'EGP')}</strong></div>
-          <div class="flex justify-between"><span>خزنة الجنيه المصري (كاش):</span><strong>${formatMoney(v.egp, 'EGP')}</strong></div>
-          <div class="border-t border-slate-200 pt-2 flex justify-between text-sm font-black text-emerald-700">
-            <span>إجمالي الكاش المعادل بالمصري:</span><span>${formatMoney(totalEGP, 'EGP')}</span>
+          <div class="flex justify-between"><span>خزنة الجنيه المصري (كاش):</span><strong class="${v.egp < 0 ? 'text-rose-600' : ''}">${formatMoney(v.egp, 'EGP')}</strong></div>
+          <div class="border-t border-slate-200 pt-2 flex justify-between text-sm font-black ${totalEGP < 0 ? 'text-rose-600' : 'text-emerald-700'}">
+            <span>صافي الكاش المعادل بالمصري:</span><span>${formatMoney(totalEGP, 'EGP')}</span>
           </div>
         </div>
       `;
       openModal('egpCalcModal');
     }
 
-    // ================= 11. تحديث الواجهة والرسوم البيانية =================
+    // ================= 12. تحديث الواجهة والرسوم البيانية =================
     function refreshAll() {
       const disp = appState.currency;
       document.getElementById('monthSelector').value = selectedMonth;
@@ -2210,11 +2446,11 @@
       const v = getVaultBalances();
       const vaultInDisp = convertAmount(v.sar, 'SAR', disp) + convertAmount(v.egp, 'EGP', disp);
 
-      // حساب حصتك المملوكة في كل نوع أصل بعملة العرض
       const reOwnedDisp = (appState.assets || []).filter(a => a.category === 'realestate').reduce((s, a) => s + convertAmount(getAssetOwnedVal(a), a.currency, disp), 0);
       const goldOwnedDisp = (appState.assets || []).filter(a => a.category === 'gold').reduce((s, a) => s + convertAmount(getAssetOwnedVal(a), a.currency, disp), 0);
       const landOwnedDisp = (appState.assets || []).filter(a => a.category === 'land').reduce((s, a) => s + convertAmount(getAssetOwnedVal(a), a.currency, disp), 0);
-      const assetsOwnedDisp = reOwnedDisp + goldOwnedDisp + landOwnedDisp;
+      const customOwnedDisp = (appState.assets || []).filter(a => a.category === 'custom').reduce((s, a) => s + convertAmount(getAssetOwnedVal(a), a.currency, disp), 0);
+      const assetsOwnedDisp = reOwnedDisp + goldOwnedDisp + landOwnedDisp + customOwnedDisp;
       const grandWealthDisp = vaultInDisp + assetsOwnedDisp;
 
       document.getElementById('dashAvailableBalance').textContent = formatMoney(available, disp);
@@ -2226,25 +2462,35 @@
       document.getElementById('dashMonthSavings').textContent = formatMoney(monthSav, disp);
       const savRate = income > 0 ? ((monthSav / income) * 100).toFixed(1) : '0.0';
       document.getElementById('dashSavingsRateHint').textContent = `نسبة الادخار: ${savRate}%`;
-      document.getElementById('dashVaultTotal').textContent = formatMoney(vaultInDisp, disp);
 
+      const dashVaultEl = document.getElementById('dashVaultTotal');
+      dashVaultEl.textContent = formatMoney(vaultInDisp, disp);
+      dashVaultEl.className = vaultInDisp < 0 ? 'text-lg sm:text-xl font-black text-rose-600' : 'text-lg sm:text-xl font-black text-indigo-700';
+
+      // شريط تقدم الادخار بالألوان الموحدة
       const pct = targetDisp > 0 ? Math.min(100, Math.round((monthSav / targetDisp) * 100)) : 0;
+      const savStyle = getUnifiedProgressStyle(pct);
       document.getElementById('dashSavingsProgressText').textContent = `المدخر: ${formatMoney(monthSav, disp)} | الهدف: ${formatMoney(targetDisp, disp)}`;
-      document.getElementById('dashSavingsPercent').textContent = `${pct}%`;
-      document.getElementById('dashSavingsBar').style.width = `${pct}%`;
+      const savBadge = document.getElementById('dashSavingsPercent');
+      savBadge.textContent = `${pct}%`;
+      savBadge.className = `text-sm font-black px-3 py-1 rounded-xl border ${savStyle.badge}`;
+      const savBar = document.getElementById('dashSavingsBar');
+      savBar.style.width = `${pct}%`;
+      savBar.className = `h-full rounded-full transition-all duration-500 ${savStyle.bar}`;
 
-      // الأصول المجمعة
+      // الأصول المجمعة (4 فئات مصنفة)
       const groups = [
         { key: 'realestate', title: 'العقارات والشقق', icon: 'building-2', color: 'indigo', owned: reOwnedDisp },
         { key: 'gold', title: 'الذهب والسبائك', icon: 'coins', color: 'amber', owned: goldOwnedDisp },
-        { key: 'land', title: 'الأراضي', icon: 'map-pin', color: 'emerald', owned: landOwnedDisp }
+        { key: 'land', title: 'الأراضي', icon: 'map-pin', color: 'emerald', owned: landOwnedDisp },
+        { key: 'custom', title: 'أصول مخصصة واستثمارات', icon: 'briefcase', color: 'purple', owned: customOwnedDisp }
       ];
       const gHtml = groups.map(g => {
         const list = (appState.assets || []).filter(a => a.category === g.key && !a.sold);
         const mTotal = list.reduce((s, a) => s + convertAmount(getAssetMarketVal(a), a.currency, disp), 0);
         const sub = g.key === 'gold'
           ? `الوزن المتاح: ${list.reduce((s, a) => s + (a.goldDetails?.remainingGrams || 0), 0)} جم`
-          : `حصتك المدفوعة/المملوكة: ${formatMoney(g.owned, disp)}`;
+          : `حصتك المملوكة: ${formatMoney(g.owned, disp)}`;
         return `
           <div onclick="openCategoryDetails('${g.key}')" class="cursor-pointer bg-slate-50 hover:bg-white border border-slate-200 hover:border-emerald-400 rounded-2xl p-4 transition">
             <div class="flex items-center justify-between mb-1.5">
@@ -2262,7 +2508,7 @@
       document.getElementById('dashAssetsSummaryGrid').innerHTML = gHtml;
       document.getElementById('assetsGroupedCards').innerHTML = gHtml;
 
-      // ملخص محفظة الذهب (مجموع الشراء، السوقي، المبيعات، صافي الربح/الخسارة)
+      // ملخص محفظة الذهب
       const goldList = (appState.assets || []).filter(a => a.category === 'gold' && a.goldDetails);
       const goldBanner = document.getElementById('goldSummaryBanner');
       if (goldList.length > 0) {
@@ -2304,9 +2550,29 @@
         goldBanner.classList.add('hidden');
       }
 
-      document.getElementById('assetsFullList').innerHTML = (appState.assets || []).length
-        ? appState.assets.map(renderAssetCard).join('')
-        : `<p class="text-xs text-slate-400 text-center py-6">لا توجد أصول مسجلة بعد.</p>`;
+      // عرض جميع الأصول مصنفة ومجمعة حسب الفئة تلقائياً
+      const catContainer = document.getElementById('assetsCategorizedContainer');
+      if (!(appState.assets || []).length) {
+        catContainer.innerHTML = `<div class="bg-white border border-slate-200 rounded-2xl p-8 text-center text-xs text-slate-400">لا توجد أصول مسجلة بعد. اضغط «إضافة أصل جديد» للبدء.</div>`;
+      } else {
+        catContainer.innerHTML = groups.map(g => {
+          const items = (appState.assets || []).filter(a => a.category === g.key);
+          if (!items.length) return '';
+          return `
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h3 class="text-sm font-black text-slate-900 flex items-center gap-2">
+                  <i data-lucide="${g.icon}" class="w-4 h-4 text-${g.color}-600"></i> ${g.title} (${items.length})
+                </h3>
+                <span class="text-xs font-extrabold text-slate-500">مصنفة تلقائياً</span>
+              </div>
+              <div class="space-y-3">
+                ${items.map(renderAssetCard).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
 
       // أحدث الحركات
       const mTxs = (appState.transactions || []).filter(t => t.date && t.date.startsWith(selectedMonth));
@@ -2323,18 +2589,28 @@
       document.getElementById('wealthGrandTotalDisp').textContent = formatMoney(grandWealthDisp, disp);
       document.getElementById('wealthGrandTotalEGP').textContent = `المعادل الإجمالي بالمصري: ${formatMoney(convertAmount(grandWealthDisp, disp, 'EGP'), 'EGP')}`;
 
-      const cashPct = grandWealthDisp > 0 ? Math.round((vaultInDisp / grandWealthDisp) * 100) : 0;
-      const assetsPct = grandWealthDisp > 0 ? (100 - cashPct) : 0;
+      const posCash = Math.max(0, vaultInDisp);
+      const posTotal = posCash + Math.max(0, assetsOwnedDisp);
+      const cashPct = posTotal > 0 ? Math.round((posCash / posTotal) * 100) : 0;
+      const assetsPct = posTotal > 0 ? (100 - cashPct) : 0;
       document.getElementById('wealthCashPctLabel').textContent = `الكاش المدخر: ${cashPct}% (${formatMoney(vaultInDisp, disp)})`;
       document.getElementById('wealthAssetsPctLabel').textContent = `حصتك في الأصول: ${assetsPct}% (${formatMoney(assetsOwnedDisp, disp)})`;
       document.getElementById('wealthCashBar').style.width = `${cashPct}%`;
       document.getElementById('wealthAssetsBar').style.width = `${assetsPct}%`;
 
-      document.getElementById('savingsSARBox').textContent = formatMoney(v.sar, 'SAR');
-      document.getElementById('savingsSARToEGP').textContent = `تعادل بالمصري: ${formatMoney(sarToEGP, 'EGP')}`;
-      document.getElementById('savingsEGPBox').textContent = formatMoney(v.egp, 'EGP');
-      document.getElementById('savingsEGPToSAR').textContent = `تعادل بالسعودي: ${formatMoney(egpToSAR, 'SAR')}`;
-      document.getElementById('savingsCombinedEGPBox').textContent = formatMoney(totalCashEGP, 'EGP');
+      const sarBox = document.getElementById('savingsSARBox');
+      sarBox.textContent = formatMoney(v.sar, 'SAR');
+      sarBox.className = v.sar < 0 ? 'text-2xl font-black text-rose-600 mt-1' : 'text-2xl font-black text-emerald-950 mt-1';
+      document.getElementById('savingsSARToEGP').textContent = v.sar < 0 ? '⚠️ رصيد بالسالب (سلف)' : `تعادل بالمصري: ${formatMoney(sarToEGP, 'EGP')}`;
+
+      const egpBox = document.getElementById('savingsEGPBox');
+      egpBox.textContent = formatMoney(v.egp, 'EGP');
+      egpBox.className = v.egp < 0 ? 'text-2xl font-black text-rose-600 mt-1' : 'text-2xl font-black text-amber-950 mt-1';
+      document.getElementById('savingsEGPToSAR').textContent = v.egp < 0 ? '⚠️ رصيد بالسالب (سلف)' : `تعادل بالسعودي: ${formatMoney(egpToSAR, 'SAR')}`;
+
+      const combEGP = document.getElementById('savingsCombinedEGPBox');
+      combEGP.textContent = formatMoney(totalCashEGP, 'EGP');
+      combEGP.className = totalCashEGP < 0 ? 'text-2xl font-black text-rose-400 mt-1' : 'text-2xl font-black text-emerald-400 mt-1';
       document.getElementById('savingsCombinedSARBox').textContent = `أو ما يعادل ${formatMoney(totalCashSAR, 'SAR')}`;
 
       document.getElementById('wealthAssetsBreakdown').innerHTML = `
@@ -2352,6 +2628,11 @@
           <span class="text-xs font-extrabold text-emerald-900">الأراضي (حسب نسبة حصتك)</span>
           <div class="text-xl font-black text-slate-900 mt-1">${formatMoney(landOwnedDisp, disp)}</div>
           <span class="text-[11px] text-emerald-800">المعادل: ${formatMoney(convertAmount(landOwnedDisp, disp, 'EGP'), 'EGP')}</span>
+        </div>
+        <div class="bg-purple-50/70 border border-purple-200 rounded-2xl p-4">
+          <span class="text-xs font-extrabold text-purple-900">أصول مخصصة (بورصة / أخرى)</span>
+          <div class="text-xl font-black text-slate-900 mt-1">${formatMoney(customOwnedDisp, disp)}</div>
+          <span class="text-[11px] text-purple-800">المعادل: ${formatMoney(convertAmount(customOwnedDisp, disp, 'EGP'), 'EGP')}</span>
         </div>
       `;
 
@@ -2389,31 +2670,57 @@
       });
       document.getElementById('commitmentsFullList').innerHTML = commHtml || `<p class="text-xs text-slate-400 text-center py-6">لا توجد التزامات مسجلة.</p>`;
 
-      // الميزانيات
+      // الميزانيات بألوان التقدم الموحدة
       let alertsHtml = '';
       document.getElementById('budgetsCardsGrid').innerHTML = CATEGORIES.map(cat => {
         const bDisp = Math.round(convertAmount(appState.budgetsSAR[cat.id] || 0, 'SAR', disp));
         const sDisp = catSpent[cat.id] || 0;
-        const p = bDisp > 0 ? Math.min(100, Math.round((sDisp / bDisp) * 100)) : 0;
-        if (bDisp > 0 && sDisp >= bDisp * 0.8) {
-          alertsHtml += `<div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-2 text-xs font-bold">⚠️ تنبيه ميزانية «${cat.name}»: صرفت ${formatMoney(sDisp, disp)} من ${formatMoney(bDisp, disp)}</div>`;
+        const p = bDisp > 0 ? Math.round((sDisp / bDisp) * 100) : 0;
+        const barW = Math.min(100, Math.max(0, p));
+        const style = getUnifiedProgressStyle(p);
+        const rem = bDisp - sDisp;
+
+        if (bDisp > 0 && p >= 80 && activeTab === 'budgets') {
+          alertsHtml += `<div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-2 text-xs font-bold">⚠️ تنبيه ميزانية «${cat.name}»: وصلت إلى ${p}% (${formatMoney(sDisp, disp)} من ${formatMoney(bDisp, disp)})</div>`;
         }
         return `
           <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-2.5">
-            <div class="flex justify-between text-xs font-black"><span>${cat.name}</span><span>${p}%</span></div>
-            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${p}%; background:${cat.color}"></div></div>
+            <div class="flex items-center justify-between text-xs font-black">
+              <span>${cat.name}</span>
+              <span class="px-2 py-0.5 rounded-lg border text-[11px] ${style.badge}">${p}%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300 ${style.bar}" style="width:${barW}%"></div>
+            </div>
             <div class="flex items-center justify-between text-xs">
-              <span>المصروف: <strong>${formatMoney(sDisp, disp)}</strong></span>
-              <input type="number" value="${bDisp}" onchange="updateBudget('${cat.id}', this.value)" class="w-24 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 font-extrabold text-left" />
+              <div>
+                <span class="block">المصروف: <strong>${formatMoney(sDisp, disp)}</strong></span>
+                <span class="text-[11px] ${rem >= 0 ? 'text-emerald-700' : 'text-rose-600'} font-bold">
+                  ${rem >= 0 ? `متبقي للـ 100%: ${formatMoney(rem, disp)}` : `تجاوز بـ: ${formatMoney(Math.abs(rem), disp)}`}
+                </span>
+              </div>
+              <div class="text-left">
+                <span class="block text-[10px] text-slate-400">الحد الشهري</span>
+                <input type="number" value="${bDisp}" onchange="updateBudget('${cat.id}', this.value)" class="w-24 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 font-extrabold text-left" />
+              </div>
             </div>
           </div>
         `;
       }).join('');
       document.getElementById('alertsArea').innerHTML = alertsHtml;
 
+      // تعبئة حقول الإعدادات وأسعار الذهب
       document.getElementById('inpSalarySAR').value = appState.salarySAR;
       document.getElementById('inpTargetSAR').value = appState.savingsTargetSAR;
       document.getElementById('inpExchangeRate').value = appState.exchangeRate;
+
+      const gp = appState.goldPrices || getDefaultState().goldPrices;
+      document.getElementById('inpGoldEGP24').value = gp.EGP?.[24] || 4650;
+      document.getElementById('inpGoldEGP21').value = gp.EGP?.[21] || 4070;
+      document.getElementById('inpGoldEGP18').value = gp.EGP?.[18] || 3488;
+      document.getElementById('inpGoldSAR24').value = gp.SAR?.[24] || 345;
+      document.getElementById('inpGoldSAR21').value = gp.SAR?.[21] || 302;
+      document.getElementById('inpGoldSAR18').value = gp.SAR?.[18] || 259;
 
       renderTransactionsTab();
       renderReminders();
@@ -2464,7 +2771,34 @@
       appState.salarySAR = Number(document.getElementById('inpSalarySAR').value) || 7500;
       appState.savingsTargetSAR = Number(document.getElementById('inpTargetSAR').value) || 3500;
       appState.exchangeRate = Number(document.getElementById('inpExchangeRate').value) || 13.5;
-      saveState(); refreshAll(); showToast('تم حفظ الإعدادات');
+
+      appState.goldPrices = {
+        EGP: {
+          24: Number(document.getElementById('inpGoldEGP24').value) || 4650,
+          21: Number(document.getElementById('inpGoldEGP21').value) || 4070,
+          18: Number(document.getElementById('inpGoldEGP18').value) || 3488
+        },
+        SAR: {
+          24: Number(document.getElementById('inpGoldSAR24').value) || 345,
+          21: Number(document.getElementById('inpGoldSAR21').value) || 302,
+          18: Number(document.getElementById('inpGoldSAR18').value) || 259
+        }
+      };
+
+      // تحديث أسعار جميع سبائك وقطع الذهب المسجلة تلقائياً بناءً على عيارها وعملتها
+      (appState.assets || []).forEach(a => {
+        if (a.category === 'gold' && a.goldDetails) {
+          const k = a.goldDetails.karat || 21;
+          const c = a.currency || 'EGP';
+          const newPrice = appState.goldPrices[c]?.[k];
+          if (newPrice && newPrice > 0) {
+            a.goldDetails.currentPricePerGram = newPrice;
+            a.totalValue = Math.round((a.goldDetails.remainingGrams || 0) * newPrice);
+          }
+        }
+      });
+
+      saveState(); refreshAll(); showToast('تم حفظ الإعدادات وتحديث أسعار الذهب!');
     }
 
     function exportJSON() {
